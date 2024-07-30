@@ -1,9 +1,16 @@
 package com.devsuperior.dscatalog.entities;
 
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.Objects;
-
+@Entity
+//Nome do banco de dados
+@Table(name = "tb_category")
 public class Category implements Serializable {
+    @Id
+    //Vai autoincrementar no banco de dados
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
 
