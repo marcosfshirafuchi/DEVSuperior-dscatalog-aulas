@@ -8,13 +8,13 @@ import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -24,11 +24,11 @@ public class CategoryService {
 
     //Garante a integridade das transações no banco de dados
     @Transactional(readOnly = true)
-    public List<CategoryDTO> findAll(){
-        List<Category> list = repository.findAll();
+    public Page<CategoryDTO> findAllPaged(PageRequest pageRequest){
+        Page<Category> list = repository.findAll(pageRequest);
 
         //Cada x(elemento) do list vai ser transformado elemento da listDTO
-        return list.stream().map(x -> new CategoryDTO(x)).collect(Collectors.toList());
+        return list.map(x -> new CategoryDTO(x));
 
         /*//Outra forma de converter list para listDTO
         List<CategoryDTO> listDTO = new ArrayList<>();
