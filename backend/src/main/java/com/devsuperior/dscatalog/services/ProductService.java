@@ -12,7 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,11 +31,11 @@ public class ProductService {
 
     //Garante a integridade das transações no banco de dados
     @Transactional(readOnly = true)
-    public Page<ProductDTO> findAllPaged(PageRequest pageRequest){
-        Page<Product> list = repository.findAll(pageRequest);
+    public Page<ProductDTO> findAllPaged(Pageable pageable){
+        Page<Product> list = repository.findAll(pageable);
 
         //Cada x(elemento) do list vai ser transformado elemento da listDTO
-        return list.map(x -> new ProductDTO(x));
+        return list.map(x -> new ProductDTO(x, x.getCategories()));
 
         /*//Outra forma de converter list para listDTO
         List<CategoryDTO> listDTO = new ArrayList<>();
